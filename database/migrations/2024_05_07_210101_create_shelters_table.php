@@ -11,6 +11,8 @@ return new class extends Migration {
         Schema::create('shelters', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Neighborhood::class);
+            $table->string('provider');
+            $table->string('provider_id');
 
             $table->string('name');
             $table->string('zone');
@@ -21,6 +23,10 @@ return new class extends Migration {
             $table->integer('shelter_capacity_count');
             $table->integer('sheltered_capacity_count');
             $table->boolean('is_pet_friendly');
+
+
+            $table->index(['provider', 'provider_id']);
+            $table->unique(['provider', 'provider_id']);
 
             $table->softDeletes();
             $table->timestamps();

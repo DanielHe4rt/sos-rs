@@ -15,6 +15,8 @@ class Shelter extends Model
     use SoftDeletes, HasFactory;
 
     protected $fillable = [
+        'provider',
+        'provider_id',
         'name',
         'neighborhood',
         'zone',
