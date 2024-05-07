@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Neighborhood;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -9,9 +10,9 @@ return new class extends Migration {
     {
         Schema::create('shelters', function (Blueprint $table) {
             $table->id();
+            $table->foreignIdFor(Neighborhood::class);
 
             $table->string('name');
-            $table->string('neighborhood');
             $table->string('zone');
             $table->boolean('need_volunteers');
             $table->string('address');

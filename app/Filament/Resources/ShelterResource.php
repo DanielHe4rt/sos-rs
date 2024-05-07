@@ -48,7 +48,8 @@ class ShelterResource extends Resource
                 TextInput::make('name')
                     ->required(),
 
-                TextInput::make('neighborhood')
+                Select::make('neighborhood_id')
+                    ->relationship('neighborhood', 'name')
                     ->required(),
 
                 Select::make('zone')
