@@ -4,7 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\ShelterNeedResource\Pages;
 use App\Models\Shelter\ShelterNeed;
-use Filament\Forms\Components\Placeholder;
+use Filament\Tables\Actions\ActionGroup;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
@@ -27,36 +27,35 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 class ShelterNeedResource extends Resource
 {
     protected static ?string $model = ShelterNeed::class;
+    protected static ?string $modelLabel = 'Necessidade de Abrigo';
+    protected static ?string $pluralLabel = 'Necessidades de Abrigos';
 
     protected static ?string $slug = 'shelter-needs';
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-list-bullet';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Placeholder::make('created_at')
-                    ->label('Created Date')
-                    ->content(fn(?ShelterNeed $record): string => $record?->created_at?->diffForHumans() ?? '-'),
-
-                Placeholder::make('updated_at')
-                    ->label('Last Modified Date')
-                    ->content(fn(?ShelterNeed $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
-
                 Select::make('shelter_id')
+                    ->label('Abrigo')
                     ->relationship('shelter', 'name')
+                    ->preload()
                     ->searchable()
                     ->required(),
 
                 Select::make('necessity_id')
+                    ->label('Necessidade')
                     ->relationship('necessity', 'name')
+                    ->preload()
                     ->searchable()
                     ->required(),
 
                 TextInput::make('type_id')
-                    ->required()
-                    ->integer(),
+                    ->label('Tipo')
+                    ->integer()
+                    ->required(),
             ]);
     }
 
@@ -78,10 +77,12 @@ class ShelterNeedResource extends Resource
                 TrashedFilter::make(),
             ])
             ->actions([
-                EditAction::make(),
-                DeleteAction::make(),
-                RestoreAction::make(),
-                ForceDeleteAction::make(),
+                ActionGroup::make([
+                    EditAction::make(),
+                    DeleteAction::make(),
+                    RestoreAction::make(),
+                    ForceDeleteAction::make(),
+                ])
             ])
             ->bulkActions([
                 BulkActionGroup::make([

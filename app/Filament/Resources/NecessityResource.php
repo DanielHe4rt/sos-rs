@@ -4,11 +4,11 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\NecessityResource\Pages;
 use App\Models\Necessity\Necessity;
-use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
+use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Actions\BulkActionGroup;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\DeleteBulkAction;
@@ -27,28 +27,25 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 class NecessityResource extends Resource
 {
     protected static ?string $model = Necessity::class;
+    protected static ?string $modelLabel = 'Necessidade';
+    protected static ?string $pluralLabel = 'Necessidades';
 
     protected static ?string $slug = 'necessities';
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-hand-raised';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Placeholder::make('created_at')
-                    ->label('Created Date')
-                    ->content(fn(?Necessity $record): string => $record?->created_at?->diffForHumans() ?? '-'),
-
-                Placeholder::make('updated_at')
-                    ->label('Last Modified Date')
-                    ->content(fn(?Necessity $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
-
                 TextInput::make('name')
+                    ->label('Nome')
                     ->required(),
 
                 Select::make('type_id')
+                    ->label('Tipo')
                     ->relationship('type', 'name')
+                    ->preload()
                     ->searchable()
                     ->required(),
             ]);
@@ -59,10 +56,12 @@ class NecessityResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('name')
+                    ->label('Nome')
                     ->searchable()
                     ->sortable(),
 
                 TextColumn::make('type.name')
+                    ->label('Tipo')
                     ->searchable()
                     ->sortable(),
             ])
@@ -70,10 +69,12 @@ class NecessityResource extends Resource
                 TrashedFilter::make(),
             ])
             ->actions([
-                EditAction::make(),
-                DeleteAction::make(),
-                RestoreAction::make(),
-                ForceDeleteAction::make(),
+                ActionGroup::make([
+                    EditAction::make(),
+                    DeleteAction::make(),
+                    RestoreAction::make(),
+                    ForceDeleteAction::make(),
+                ]),
             ])
             ->bulkActions([
                 BulkActionGroup::make([

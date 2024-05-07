@@ -4,10 +4,11 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\TypeResource\Pages;
 use App\Models\Necessity\Type;
-use Filament\Forms\Components\Placeholder;
+use Filament\Forms\Components\ColorPicker;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
+use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Actions\BulkActionGroup;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\DeleteBulkAction;
@@ -16,6 +17,7 @@ use Filament\Tables\Actions\ForceDeleteAction;
 use Filament\Tables\Actions\ForceDeleteBulkAction;
 use Filament\Tables\Actions\RestoreAction;
 use Filament\Tables\Actions\RestoreBulkAction;
+use Filament\Tables\Columns\ColorColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
@@ -26,26 +28,22 @@ class TypeResource extends Resource
 {
     protected static ?string $model = Type::class;
 
+    protected static ?string $modelLabel = 'Tipo de Necessidade';
+    protected static ?string $pluralLabel = 'Tipos de Necessidades';
+
     protected static ?string $slug = 'types';
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-exclamation-circle';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Placeholder::make('created_at')
-                    ->label('Created Date')
-                    ->content(fn(?Type $record): string => $record?->created_at?->diffForHumans() ?? '-'),
-
-                Placeholder::make('updated_at')
-                    ->label('Last Modified Date')
-                    ->content(fn(?Type $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
-
                 TextInput::make('name')
+                    ->label('Nome')
                     ->required(),
 
-                TextInput::make('color')
+                ColorPicker::make('color')
                     ->required(),
             ]);
     }
@@ -55,19 +53,23 @@ class TypeResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('name')
+                    ->label('Nome')
                     ->searchable()
                     ->sortable(),
 
-                TextColumn::make('color'),
+                ColorColumn::make('color')
+                    ->label('Cor'),
             ])
             ->filters([
                 TrashedFilter::make(),
             ])
             ->actions([
-                EditAction::make(),
-                DeleteAction::make(),
-                RestoreAction::make(),
-                ForceDeleteAction::make(),
+                ActionGroup::make([
+                    EditAction::make(),
+                    DeleteAction::make(),
+                    RestoreAction::make(),
+                    ForceDeleteAction::make(),
+                ])
             ])
             ->bulkActions([
                 BulkActionGroup::make([

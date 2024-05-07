@@ -5,12 +5,12 @@ namespace App\Filament\Resources;
 use App\Enums\ShelterZoneEnum;
 use App\Filament\Resources\ShelterResource\Pages;
 use App\Models\Shelter\Shelter;
-use Filament\Forms\Components\Checkbox;
-use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
+use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Actions\BulkActionGroup;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\DeleteBulkAction;
@@ -29,53 +29,63 @@ class ShelterResource extends Resource
 {
     protected static ?string $model = Shelter::class;
 
+    protected static ?string $modelLabel = 'Abrigo';
+
+    protected static ?string $pluralLabel = 'Abrigos';
+
     protected static ?string $slug = 'shelters';
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-home';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Placeholder::make('created_at')
-                    ->label('Created Date')
-                    ->content(fn(?Shelter $record): string => $record?->created_at?->diffForHumans() ?? '-'),
-
-                Placeholder::make('updated_at')
-                    ->label('Last Modified Date')
-                    ->content(fn(?Shelter $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
-
                 TextInput::make('name')
+                    ->label('Nome')
                     ->required(),
 
                 Select::make('neighborhood_id')
+                    ->label('Bairro')
                     ->relationship('neighborhood', 'name')
+                    ->preload()
+                    ->searchable()
                     ->required(),
 
                 Select::make('zone')
+                    ->label('Zona')
                     ->options(ShelterZoneEnum::class)
                     ->required(),
 
-                Checkbox::make('need_volunteers'),
-
                 TextInput::make('address')
+                    ->label('Endereço')
+                    ->required(),
+
+                TextInput::make('phone_number')
+                    ->label('Número de telefone')
+                    ->mask('(99) 99999-9999')
                     ->required(),
 
                 TextInput::make('pix')
                     ->required(),
 
-                TextInput::make('phone_number')
-                    ->required(),
-
                 TextInput::make('shelter_capacity_count')
+                    ->label('Capacidade do abrigo')
                     ->required()
                     ->integer(),
 
                 TextInput::make('sheltered_capacity_count')
+                    ->label('Capacidade de abrigados')
                     ->required()
                     ->integer(),
 
-                Checkbox::make('is_pet_friendly'),
+                Toggle::make('is_pet_friendly')
+                    ->inline(false)
+                    ->label('Aceita animais de estimação'),
+
+                Toggle::make('need_volunteers')
+                    ->inline(false)
+                    ->label('Precisa de voluntários'),
             ]);
     }
 
@@ -84,35 +94,42 @@ class ShelterResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('name')
+                    ->label('Nome')
                     ->searchable()
                     ->sortable(),
 
-                TextColumn::make('neighborhood'),
+                TextColumn::make('neighborhood')
+                    ->label('Bairro')
+                    ->searchable()
+                    ->sortable(),
 
-                TextColumn::make('zone'),
+                TextColumn::make('zone')
+                    ->label('Zona'),
 
-                TextColumn::make('need_volunteers'),
+                TextColumn::make('need_volunteers')
+                    ->label('Precisa de voluntários'),
 
-                TextColumn::make('address'),
+                TextColumn::make('phone_number')
+                    ->label('Número de telefone'),
 
-                TextColumn::make('pix'),
+                TextColumn::make('shelter_capacity_count')
+                    ->sortable()
+                    ->label('Capacidade do abrigo'),
 
-                TextColumn::make('phone_number'),
-
-                TextColumn::make('shelter_capacity_count'),
-
-                TextColumn::make('sheltered_capacity_count'),
-
-                TextColumn::make('is_pet_friendly'),
+                TextColumn::make('sheltered_capacity_count')
+                    ->sortable()
+                    ->label('Capacidade de abrigados'),
             ])
             ->filters([
                 TrashedFilter::make(),
             ])
             ->actions([
-                EditAction::make(),
-                DeleteAction::make(),
-                RestoreAction::make(),
-                ForceDeleteAction::make(),
+                ActionGroup::make([
+                    EditAction::make(),
+                    DeleteAction::make(),
+                    RestoreAction::make(),
+                    ForceDeleteAction::make(),
+                ])
             ])
             ->bulkActions([
                 BulkActionGroup::make([
