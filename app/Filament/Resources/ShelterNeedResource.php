@@ -2,9 +2,10 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\TypeResource\Pages;
-use App\Models\Necessity\Type;
+use App\Filament\Resources\ShelterNeedResource\Pages;
+use App\Models\Shelter\ShelterNeed;
 use Filament\Forms\Components\Placeholder;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -20,13 +21,14 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class TypeResource extends Resource
+class ShelterNeedResource extends Resource
 {
-    protected static ?string $model = Type::class;
+    protected static ?string $model = ShelterNeed::class;
 
-    protected static ?string $slug = 'types';
+    protected static ?string $slug = 'shelter-needs';
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
@@ -36,17 +38,25 @@ class TypeResource extends Resource
             ->schema([
                 Placeholder::make('created_at')
                     ->label('Created Date')
-                    ->content(fn(?Type $record): string => $record?->created_at?->diffForHumans() ?? '-'),
+                    ->content(fn(?ShelterNeed $record): string => $record?->created_at?->diffForHumans() ?? '-'),
 
                 Placeholder::make('updated_at')
                     ->label('Last Modified Date')
-                    ->content(fn(?Type $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
+                    ->content(fn(?ShelterNeed $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
 
-                TextInput::make('name')
+                Select::make('shelter_id')
+                    ->relationship('shelter', 'name')
+                    ->searchable()
                     ->required(),
 
-                TextInput::make('color')
+                Select::make('necessity_id')
+                    ->relationship('necessity', 'name')
+                    ->searchable()
                     ->required(),
+
+                TextInput::make('type_id')
+                    ->required()
+                    ->integer(),
             ]);
     }
 
@@ -54,11 +64,15 @@ class TypeResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('name')
+                TextColumn::make('shelter.name')
                     ->searchable()
                     ->sortable(),
 
-                TextColumn::make('color'),
+                TextColumn::make('necessity.name')
+                    ->searchable()
+                    ->sortable(),
+
+                TextColumn::make('type_id'),
             ])
             ->filters([
                 TrashedFilter::make(),
@@ -81,9 +95,9 @@ class TypeResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListTypes::route('/'),
-            'create' => Pages\CreateType::route('/create'),
-            'edit' => Pages\EditType::route('/{record}/edit'),
+            'index' => Pages\ListShelterNeeds::route('/'),
+            'create' => Pages\CreateShelterNeed::route('/create'),
+            'edit' => Pages\EditShelterNeed::route('/{record}/edit'),
         ];
     }
 
@@ -95,8 +109,28 @@ class TypeResource extends Resource
             ]);
     }
 
+    public static function getGlobalSearchEloquentQuery(): Builder
+    {
+        return parent::getGlobalSearchEloquentQuery()->with(['shelter', 'necessity']);
+    }
+
     public static function getGloballySearchableAttributes(): array
     {
-        return ['name'];
+        return ['shelter.name', 'necessity.name'];
+    }
+
+    public static function getGlobalSearchResultDetails(Model $record): array
+    {
+        $details = [];
+
+        if ($record->shelter) {
+            $details['Shelter'] = $record->shelter->name;
+        }
+
+        if ($record->necessity) {
+            $details['Necessity'] = $record->necessity->name;
+        }
+
+        return $details;
     }
 }

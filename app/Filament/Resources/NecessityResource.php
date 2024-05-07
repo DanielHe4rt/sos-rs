@@ -2,9 +2,10 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\TypeResource\Pages;
-use App\Models\Necessity\Type;
+use App\Filament\Resources\NecessityResource\Pages;
+use App\Models\Necessity\Necessity;
 use Filament\Forms\Components\Placeholder;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -20,13 +21,14 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class TypeResource extends Resource
+class NecessityResource extends Resource
 {
-    protected static ?string $model = Type::class;
+    protected static ?string $model = Necessity::class;
 
-    protected static ?string $slug = 'types';
+    protected static ?string $slug = 'necessities';
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
@@ -36,16 +38,18 @@ class TypeResource extends Resource
             ->schema([
                 Placeholder::make('created_at')
                     ->label('Created Date')
-                    ->content(fn(?Type $record): string => $record?->created_at?->diffForHumans() ?? '-'),
+                    ->content(fn(?Necessity $record): string => $record?->created_at?->diffForHumans() ?? '-'),
 
                 Placeholder::make('updated_at')
                     ->label('Last Modified Date')
-                    ->content(fn(?Type $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
+                    ->content(fn(?Necessity $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
 
                 TextInput::make('name')
                     ->required(),
 
-                TextInput::make('color')
+                Select::make('type_id')
+                    ->relationship('type', 'name')
+                    ->searchable()
                     ->required(),
             ]);
     }
@@ -58,7 +62,9 @@ class TypeResource extends Resource
                     ->searchable()
                     ->sortable(),
 
-                TextColumn::make('color'),
+                TextColumn::make('type.name')
+                    ->searchable()
+                    ->sortable(),
             ])
             ->filters([
                 TrashedFilter::make(),
@@ -81,9 +87,9 @@ class TypeResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListTypes::route('/'),
-            'create' => Pages\CreateType::route('/create'),
-            'edit' => Pages\EditType::route('/{record}/edit'),
+            'index' => Pages\ListNecessities::route('/'),
+            'create' => Pages\CreateNecessity::route('/create'),
+            'edit' => Pages\EditNecessity::route('/{record}/edit'),
         ];
     }
 
@@ -95,8 +101,24 @@ class TypeResource extends Resource
             ]);
     }
 
+    public static function getGlobalSearchEloquentQuery(): Builder
+    {
+        return parent::getGlobalSearchEloquentQuery()->with(['type']);
+    }
+
     public static function getGloballySearchableAttributes(): array
     {
-        return ['name'];
+        return ['name', 'type.name'];
+    }
+
+    public static function getGlobalSearchResultDetails(Model $record): array
+    {
+        $details = [];
+
+        if ($record->type) {
+            $details['Type'] = $record->type->name;
+        }
+
+        return $details;
     }
 }

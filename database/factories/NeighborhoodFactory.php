@@ -2,13 +2,13 @@
 
 namespace Database\Factories;
 
-use App\Models\Necessity\Type;
+use App\Models\Neighborhood;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
 
-class TypeFactory extends Factory
+class NeighborhoodFactory extends Factory
 {
-    protected $model = Type::class;
+    protected $model = Neighborhood::class;
 
     public function definition(): array
     {
@@ -16,7 +16,7 @@ class TypeFactory extends Factory
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
             'name' => $this->faker->name(),
-            'color' => $this->faker->word(),
+            'slug' => $this->faker->slug(),
         ];
     }
 }

@@ -2,13 +2,14 @@
 
 namespace Database\Factories;
 
+use App\Models\Necessity\Necessity;
 use App\Models\Necessity\Type;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
 
-class TypeFactory extends Factory
+class NecessityFactory extends Factory
 {
-    protected $model = Type::class;
+    protected $model = Necessity::class;
 
     public function definition(): array
     {
@@ -16,7 +17,8 @@ class TypeFactory extends Factory
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
             'name' => $this->faker->name(),
-            'color' => $this->faker->word(),
+
+            'type_id' => Type::factory(),
         ];
     }
 }

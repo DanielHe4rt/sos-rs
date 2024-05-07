@@ -2,9 +2,12 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\TypeResource\Pages;
-use App\Models\Necessity\Type;
+use App\Enums\ShelterZoneEnum;
+use App\Filament\Resources\ShelterResource\Pages;
+use App\Models\Shelter\Shelter;
+use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Placeholder;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -22,11 +25,11 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class TypeResource extends Resource
+class ShelterResource extends Resource
 {
-    protected static ?string $model = Type::class;
+    protected static ?string $model = Shelter::class;
 
-    protected static ?string $slug = 'types';
+    protected static ?string $slug = 'shelters';
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
@@ -36,17 +39,42 @@ class TypeResource extends Resource
             ->schema([
                 Placeholder::make('created_at')
                     ->label('Created Date')
-                    ->content(fn(?Type $record): string => $record?->created_at?->diffForHumans() ?? '-'),
+                    ->content(fn(?Shelter $record): string => $record?->created_at?->diffForHumans() ?? '-'),
 
                 Placeholder::make('updated_at')
                     ->label('Last Modified Date')
-                    ->content(fn(?Type $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
+                    ->content(fn(?Shelter $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
 
                 TextInput::make('name')
                     ->required(),
 
-                TextInput::make('color')
+                TextInput::make('neighborhood')
                     ->required(),
+
+                Select::make('zone')
+                    ->options(ShelterZoneEnum::class)
+                    ->required(),
+
+                Checkbox::make('need_volunteers'),
+
+                TextInput::make('address')
+                    ->required(),
+
+                TextInput::make('pix')
+                    ->required(),
+
+                TextInput::make('phone_number')
+                    ->required(),
+
+                TextInput::make('shelter_capacity_count')
+                    ->required()
+                    ->integer(),
+
+                TextInput::make('sheltered_capacity_count')
+                    ->required()
+                    ->integer(),
+
+                Checkbox::make('is_pet_friendly'),
             ]);
     }
 
@@ -58,7 +86,23 @@ class TypeResource extends Resource
                     ->searchable()
                     ->sortable(),
 
-                TextColumn::make('color'),
+                TextColumn::make('neighborhood'),
+
+                TextColumn::make('zone'),
+
+                TextColumn::make('need_volunteers'),
+
+                TextColumn::make('address'),
+
+                TextColumn::make('pix'),
+
+                TextColumn::make('phone_number'),
+
+                TextColumn::make('shelter_capacity_count'),
+
+                TextColumn::make('sheltered_capacity_count'),
+
+                TextColumn::make('is_pet_friendly'),
             ])
             ->filters([
                 TrashedFilter::make(),
@@ -81,9 +125,9 @@ class TypeResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListTypes::route('/'),
-            'create' => Pages\CreateType::route('/create'),
-            'edit' => Pages\EditType::route('/{record}/edit'),
+            'index' => Pages\ListShelters::route('/'),
+            'create' => Pages\CreateShelter::route('/create'),
+            'edit' => Pages\EditShelter::route('/{record}/edit'),
         ];
     }
 
