@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "208e8d0400488f8de8dd3f5435dca867",
+    "content-hash": "162962de867923e37db893a76e9277cc",
     "packages": [
         {
             "name": "anourvalar/eloquent-serialize",
@@ -4065,6 +4065,54 @@
                 }
             ],
             "time": "2023-11-12T21:59:55+00:00"
+        },
+        {
+            "name": "picocss/pico",
+            "version": "v2.0.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/picocss/pico.git",
+                "reference": "6dc6489e69cc1f22daa938ebd38c02400032428c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/picocss/pico/zipball/6dc6489e69cc1f22daa938ebd38c02400032428c",
+                "reference": "6dc6489e69cc1f22daa938ebd38c02400032428c",
+                "shasum": ""
+            },
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Lucas Larroche",
+                    "email": "lucas@larroche.com",
+                    "homepage": "https://lucaslarroche.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Minimal CSS Framework for semantic HTML.",
+            "homepage": "https://picocss.com",
+            "keywords": [
+                "CSS-Framework",
+                "css",
+                "dark-mode",
+                "dark-theme",
+                "lightweight",
+                "minimal",
+                "minimalist",
+                "minimalistic",
+                "native-html",
+                "scss-framework",
+                "semantic"
+            ],
+            "support": {
+                "issues": "https://github.com/picocss/pico/issues/",
+                "source": "https://github.com/picocss/pico/tree/v2.0.6"
+            },
+            "time": "2024-03-03T15:09:25+00:00"
         },
         {
             "name": "psr/cache",
