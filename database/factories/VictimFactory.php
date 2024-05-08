@@ -14,16 +14,15 @@ class VictimFactory extends Factory
     public function definition(): array
     {
         return [
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now(),
-            'type_id' => $this->faker->word(),
+            'shelter_id' => Shelter::factory(),
+            'status_id' => $this->faker->word(),
             'location' => $this->faker->word(),
             'name' => $this->faker->name(),
             'phone_number' => $this->faker->phoneNumber(),
             'address' => $this->faker->address(),
             'notes' => $this->faker->word(),
-
-            'shelter_id' => Shelter::factory(),
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now(),
         ];
     }
 }

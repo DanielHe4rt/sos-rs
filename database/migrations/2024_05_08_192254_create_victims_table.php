@@ -12,7 +12,7 @@ return new class extends Migration {
         Schema::create('victims', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Shelter::class)->nullable();
-            $table->string('type_id');
+            $table->string('status_id');
             $table->magellanPoint('location', 4326);
             $table->string('name');
             $table->string('phone_number')->nullable();

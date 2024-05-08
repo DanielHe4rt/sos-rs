@@ -6,10 +6,12 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "alexpechkarev/google-maps": "^11.0",
         "clickbar/laravel-magellan": "^1.6",
         "filament/filament": "^3.2",
         "laravel/framework": "^11.0",
         "laravel/tinker": "^2.9",
+        "livewire/livewire": "^3.4",
         "picocss/pico": "^2.0"
     },
     "require-dev": {

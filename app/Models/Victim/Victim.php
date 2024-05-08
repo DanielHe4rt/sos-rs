@@ -2,6 +2,7 @@
 
 namespace App\Models\Victim;
 
+use App\Enums\VictimStatusEnum;
 use App\Models\Shelter\Shelter;
 use Clickbar\Magellan\Database\Eloquent\HasPostgisColumns;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -14,7 +15,7 @@ class Victim extends Model
     use SoftDeletes, HasFactory, HasPostgisColumns;
 
     protected $fillable = [
-        'type_id',
+        'status_id',
         'shelter_id',
         'location',
         'name',
@@ -28,10 +29,11 @@ class Victim extends Model
         return $this->belongsTo(Shelter::class);
     }
 
-    protected function casts()
+    protected function casts(): array
     {
         return [
             'address' => 'array',
+            'status_id' => VictimStatusEnum::class
         ];
     }
 

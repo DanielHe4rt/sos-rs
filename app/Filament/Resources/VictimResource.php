@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Enums\VictimStatusEnum;
 use App\Filament\Resources\VictimResource\Pages;
 use App\Models\Victim\Victim;
 use Filament\Forms\Components\Placeholder;
@@ -44,7 +45,8 @@ class VictimResource extends Resource
                     ->label('Last Modified Date')
                     ->content(fn(?Victim $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
 
-                TextInput::make('type_id')
+                Select::make('type_id')
+                    ->options(VictimStatusEnum::class)
                     ->required(),
 
                 Select::make('shelter_id')
@@ -70,7 +72,8 @@ class VictimResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('type_id'),
+                TextColumn::make('status_id')
+                    ->badge(),
 
                 TextColumn::make('shelter.name')
                     ->searchable()
