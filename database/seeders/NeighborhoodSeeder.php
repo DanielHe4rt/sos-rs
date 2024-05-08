@@ -11,9 +11,10 @@ class NeighborhoodSeeder extends Seeder
     {
         Neighborhood::truncate();
         foreach (config('sos.neighborhood') as $neighborhood) {
+
             Neighborhood::create([
                 'name' => $neighborhood,
-                'slug' => str($neighborhood)->slug($neighborhood),
+                'slug' => str($neighborhood)->slug()->toString(),
             ]);
         }
     }

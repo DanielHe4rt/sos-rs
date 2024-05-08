@@ -2,8 +2,18 @@
 
 namespace App\Enums;
 
-enum DataProviderEnum
+use Filament\Support\Contracts\HasLabel;
+
+enum DataProviderEnum implements HasLabel
 {
-    CASE FORMS;
-    case AIRTABLE;
+    CASE Website;
+    case Airtable;
+
+    public function getLabel(): ?string
+    {
+        return match ($this) {
+            self::Website => 'Website',
+            self::Airtable => 'Airtable',
+        };
+    }
 }

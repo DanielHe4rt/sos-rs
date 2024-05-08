@@ -18,7 +18,7 @@ class Shelter extends Model
         'provider',
         'provider_id',
         'name',
-        'neighborhood',
+        'neighborhood_id',
         'zone',
         'need_volunteers',
         'address',

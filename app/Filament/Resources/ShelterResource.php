@@ -98,7 +98,7 @@ class ShelterResource extends Resource
                     ->searchable()
                     ->sortable(),
 
-                TextColumn::make('neighborhood')
+                TextColumn::make('neighborhood.name')
                     ->label('Bairro')
                     ->searchable()
                     ->sortable(),
