@@ -24,7 +24,7 @@ services:
         depends_on:
             - pgsql
     pgsql:
-        image: 'postgres:15'
+        image: 'postgis/postgis:15-3.4'
         ports:
             - '${FORWARD_DB_PORT:-5432}:5432'
         environment:
@@ -35,6 +35,7 @@ services:
         volumes:
             - 'sail-pgsql:/var/lib/postgresql/data'
             - './vendor/laravel/sail/database/pgsql/create-testing-database.sql:/docker-entrypoint-initdb.d/10-create-testing-database.sql'
+            - './docker/create-extension.sql:/docker-entrypoint-initdb.d/10-create-extension.sql'
         networks:
             - sail
         healthcheck:
