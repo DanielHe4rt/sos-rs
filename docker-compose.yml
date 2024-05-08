@@ -25,6 +25,7 @@ services:
             - pgsql
     pgsql:
         image: 'postgis/postgis:15-3.4'
+        platform: linux/amd64
         ports:
             - '${FORWARD_DB_PORT:-5432}:5432'
         environment:
