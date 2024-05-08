@@ -50,6 +50,7 @@ class CoordinatesValidator
     {
         /*
          * Check and update if changed: /docs/decisions/001-coordinates-validator.md
+         * Tool for easy polygon creation: https://www.keene.edu/campus/maps/tool/
          */
         return [
             [-53.0014372, -34.0164553],
