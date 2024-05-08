@@ -42,11 +42,15 @@ class CoordinatesValidator
 
     /**
      * The points of the polygon that defines the state of Rio Grande do Sul
+     * @check <project_root>/docs/decisions/001-coordinates-validator.md
      *
      * @return array[<float>, <float>] - Latitude and Longitude
      */
     private function coordinatesRioGrandeDoSul(): array
     {
+        /*
+         * Check and update if changed: /docs/decisions/001-coordinates-validator.md
+         */
         return [
             [-53.0014372, -34.0164553],
             [-52.5619841, -33.3215637],

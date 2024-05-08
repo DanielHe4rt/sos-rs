@@ -9,7 +9,7 @@ it('returns a successful response', function () {
     $response->assertStatus(200);
 });
 
-test('Coordiantes validator', function () {
+test('Coordinates validator', function () {
 
     $validator = new CoordinatesValidator;
 
@@ -26,7 +26,10 @@ test('Coordiantes validator', function () {
         expect($res)->toBeFalse();
     }
 
-    // Points inside of Rio Grande do Sul
+    /*
+     * Points inside of Rio Grande do Sul
+     * Check and update if changed: /docs/decisions/001-coordinates-validator.md
+     */
     $pointsInside = [
         [-55.2353954, -29.4169465],
         [-54.4224072, -28.6484905],
