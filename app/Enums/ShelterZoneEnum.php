@@ -17,11 +17,11 @@ enum ShelterZoneEnum: string implements HasLabel
     public function getLabel(): ?string
     {
         return match ($this) {
-            self::NORTH => 'North',
-            self::SOUTH => 'South',
-            self::EAST => 'East',
-            self::WEST => 'West',
-            self::CENTER => 'Center',
+            self::NORTH => 'Zona Norte',
+            self::SOUTH => 'Zona Sul',
+            self::EAST => 'Zona Leste',
+            self::WEST => 'Zona Oeste',
+            self::CENTER => 'Zona Central',
             self::Unknown => 'Não Informado',
         };
     }

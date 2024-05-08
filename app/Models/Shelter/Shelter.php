@@ -2,6 +2,8 @@
 
 namespace App\Models\Shelter;
 
+use App\Clients\Airtable\Enums\NeedVolunteersEnum;
+use App\Enums\ShelterZoneEnum;
 use App\Models\Necessity\Necessity;
 use App\Models\Neighborhood;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -27,6 +29,11 @@ class Shelter extends Model
         'shelter_capacity_count',
         'sheltered_capacity_count',
         'is_pet_friendly',
+    ];
+
+    protected $casts = [
+        'need_volunteers' => NeedVolunteersEnum::class,
+        'zone' => ShelterZoneEnum::class,
     ];
 
     public function needs(): BelongsToMany

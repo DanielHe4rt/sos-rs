@@ -16,7 +16,7 @@ return new class extends Migration {
 
             $table->string('name');
             $table->string('zone');
-            $table->boolean('need_volunteers');
+            $table->string('need_volunteers');
             $table->string('address');
             $table->string('pix');
             $table->string('phone_number');

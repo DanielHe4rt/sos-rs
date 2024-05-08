@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Clients\Airtable\AirtableClient;
+use App\Clients\Airtable\Enums\NeedVolunteersEnum;
 use App\Enums\DataProviderEnum;
 use App\Models\Neighborhood;
 use App\Models\Shelter\Shelter;
@@ -46,7 +47,7 @@ class PopulateSheltersCommand extends Command
                 'name' => $shelter->institution_name,
                 'neighborhood_id' => $neighborhoodId,
                 'zone' => $shelter->zone,
-                'need_volunteers' => $shelter->,
+                'need_volunteers' => $shelter->need_volunteers, // ENUM: yes, no, not informed
                 'address' => $shelter->address,
                 'pix' => 'N/A',
                 'phone_number' => $shelter->responsible_phone,

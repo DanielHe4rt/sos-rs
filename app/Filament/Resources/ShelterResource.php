@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Clients\Airtable\Enums\NeedVolunteersEnum;
 use App\Enums\ShelterZoneEnum;
 use App\Filament\Resources\ShelterResource\Pages;
 use App\Models\Shelter\Shelter;
@@ -57,6 +58,9 @@ class ShelterResource extends Resource
                     ->options(ShelterZoneEnum::class)
                     ->required(),
 
+                Select::make('need_volunteers')
+                    ->options(NeedVolunteersEnum::class),
+
                 TextInput::make('address')
                     ->label('Endereço')
                     ->required(),
@@ -104,9 +108,11 @@ class ShelterResource extends Resource
                     ->sortable(),
 
                 TextColumn::make('zone')
+                    ->badge()
                     ->label('Zona'),
 
                 TextColumn::make('need_volunteers')
+                    ->badge()
                     ->label('Precisa de voluntários'),
 
                 TextColumn::make('phone_number')
