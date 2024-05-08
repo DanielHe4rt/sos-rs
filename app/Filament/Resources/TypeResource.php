@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\TypeResource\Pages;
 use App\Models\Necessity\Type;
 use Filament\Forms\Components\ColorPicker;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -40,18 +41,26 @@ class TypeResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('name')
-                    ->label('Nome')
-                    ->required(),
+                Section::make('Tipos de Necessidades')
+                    ->description('Informe os tipos de necessidades que podem ser cadastradas.')
+                    ->collapsible()
+                    ->columns(1)
+                    ->schema([
+                        TextInput::make('name')
+                            ->label('Nome')
+                            ->required(),
 
-                ColorPicker::make('color')
-                    ->required(),
+                        ColorPicker::make('color')
+                            ->required(),
+                    ])
             ]);
     }
 
     public static function table(Table $table): Table
     {
         return $table
+            ->heading('Lista de Tipos de Necessidades')
+            ->description('Explore a lista de tipos de necessidades cadastradas.')
             ->columns([
                 TextColumn::make('name')
                     ->label('Nome')
@@ -60,6 +69,18 @@ class TypeResource extends Resource
 
                 ColorColumn::make('color')
                     ->label('Cor'),
+
+                TextColumn::make('created_at')
+                    ->label('Criado em')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+
+                TextColumn::make('updated_at')
+                    ->label('Alterado em')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 TrashedFilter::make(),
