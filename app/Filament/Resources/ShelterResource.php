@@ -30,6 +30,8 @@ class ShelterResource extends Resource
 {
     protected static ?string $model = Shelter::class;
 
+    protected static ?string $navigationGroup = 'Abrigo';
+
     protected static ?string $modelLabel = 'Abrigo';
 
     protected static ?string $pluralLabel = 'Abrigos';

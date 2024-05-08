@@ -28,6 +28,7 @@ class TypeResource extends Resource
 {
     protected static ?string $model = Type::class;
 
+    protected static ?string $navigationGroup = 'Necessidades';
     protected static ?string $modelLabel = 'Tipo de Necessidade';
     protected static ?string $pluralLabel = 'Tipos de Necessidades';
 

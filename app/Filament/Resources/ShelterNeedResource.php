@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Enums\ShelterNeedTypeEnum;
 use App\Filament\Resources\ShelterNeedResource\Pages;
 use App\Models\Shelter\ShelterNeed;
 use Filament\Tables\Actions\ActionGroup;
@@ -27,6 +28,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 class ShelterNeedResource extends Resource
 {
     protected static ?string $model = ShelterNeed::class;
+    protected static ?string $navigationGroup = 'Abrigo';
     protected static ?string $modelLabel = 'Necessidade de Abrigo';
     protected static ?string $pluralLabel = 'Necessidades de Abrigos';
 
@@ -52,9 +54,9 @@ class ShelterNeedResource extends Resource
                     ->searchable()
                     ->required(),
 
-                TextInput::make('type_id')
+                Select::make('type_id')
                     ->label('Tipo')
-                    ->integer()
+                    ->options(ShelterNeedTypeEnum::class)
                     ->required(),
             ]);
     }
@@ -71,7 +73,9 @@ class ShelterNeedResource extends Resource
                     ->searchable()
                     ->sortable(),
 
-                TextColumn::make('type_id'),
+                TextColumn::make('type_id', )
+                    ->label('Tipo')
+                    ->badge()
             ])
             ->filters([
                 TrashedFilter::make(),

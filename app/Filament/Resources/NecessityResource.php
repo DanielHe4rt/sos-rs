@@ -27,6 +27,8 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 class NecessityResource extends Resource
 {
     protected static ?string $model = Necessity::class;
+
+    protected static ?string $navigationGroup = 'Necessidades';
     protected static ?string $modelLabel = 'Necessidade';
     protected static ?string $pluralLabel = 'Necessidades';
 
