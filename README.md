@@ -1,5 +1,8 @@
 ## SOS-RS
 
+
+![Fluxograma](/.github/images/base-app.jpg)
+
 Up and running
 ```
 composer install
@@ -50,3 +53,31 @@ shelter_needs:
 - shelter_id: int
 - product_id: int
 - type_id: int
+
+
+victims:
+
+- type_id: enum (danger, rescued, missed)
+- shelter_id: int (nullable)
+- location:
+- name:
+- phone_number:
+- birthdate: date
+- address: json
+- notes: text
+
+
+victim_emergency_contact:
+- victim_id: int
+- name:
+- phone_number:
+- parenthood: enum
+
+victim_pets:
+- victim_id:
+- name: string (?)
+- owned: bool
+- health_condition: enum
+- size: enum
+- type: enum
+
