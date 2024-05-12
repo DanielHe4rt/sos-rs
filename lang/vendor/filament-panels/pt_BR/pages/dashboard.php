@@ -1,7 +1,10 @@
 <?php
 
 return [
-    'title' => 'Menu Inicial',
+    'title' => 'Painel Inicial',
+    'Victims ' => 'Vitímas',
+    'navigationGroup' =>[ ''],
+    
 
     'actions' => [
         'filter' => [

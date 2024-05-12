@@ -7,6 +7,7 @@
     "require": {
         "php": "^8.2",
         "alexpechkarev/google-maps": "^11.0",
+        "bezhansalleh/filament-language-switch": "^3.1",
         "clickbar/laravel-magellan": "^1.6",
         "filament/filament": "^3.2",
         "laravel/framework": "^11.0",
