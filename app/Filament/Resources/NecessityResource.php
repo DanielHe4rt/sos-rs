@@ -4,12 +4,11 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\NecessityResource\Pages;
 use App\Models\Necessity\Necessity;
-use Filament\Forms\Components\ColorPicker;
+use App\Traits\HasTranslatedNavigation;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
-use Filament\Infolists\Components\IconEntry;
 use Filament\Infolists\Components\Tabs;
 use Filament\Infolists\Components\Tabs\Tab;
 use Filament\Infolists\Components\TextEntry;
@@ -24,23 +23,23 @@ use Filament\Tables\Actions\ForceDeleteAction;
 use Filament\Tables\Actions\ForceDeleteBulkAction;
 use Filament\Tables\Actions\RestoreAction;
 use Filament\Tables\Actions\RestoreBulkAction;
+use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Filament\Tables\Actions\ViewAction;
 
 class NecessityResource extends Resource
 {
+    use HasTranslatedNavigation;
+
     protected static ?string $model = Necessity::class;
 
-    protected static ?string $navigationGroup = 'Necessidades';
-    protected static ?string $modelLabel = 'Necessidade';
-    protected static ?string $pluralLabel = 'Necessidades';
-
     protected static ?string $slug = 'necessities';
+
+    protected static ?int $navigationSort = 0;
 
     protected static ?string $navigationIcon = 'heroicon-o-hand-raised';
 
@@ -48,49 +47,49 @@ class NecessityResource extends Resource
     {
         return $form
             ->schema([
-                Section::make('Necessidades')
-                    ->description('Informe as necessidades que podem ser cadastradas.')
+                Section::make(__('Necessidades'))
+                    ->description(__('Informe as necessidades que podem ser cadastradas.'))
                     ->collapsible()
                     ->columns(1)
                     ->schema([
                         TextInput::make('name')
-                            ->label('Nome')
+                            ->label(__('Nome'))
                             ->required(),
 
                         Select::make('type_id')
-                            ->label('Tipo')
+                            ->label(__('Tipo'))
                             ->relationship('type', 'name')
                             ->preload()
                             ->searchable()
                             ->required(),
-                    ])
+                    ]),
             ]);
     }
 
     public static function table(Table $table): Table
     {
         return $table
-            ->heading('Lista de Necessidades')
-            ->description('Explore nossa lista de necessidades')
+            ->heading(__('Lista de Necessidades'))
+            ->description(__('Explore nossa lista de necessidades.'))
             ->columns([
                 TextColumn::make('name')
-                    ->label('Nome')
+                    ->label(__('Nome'))
                     ->searchable()
                     ->sortable(),
 
                 TextColumn::make('type.name')
-                    ->label('Tipo')
+                    ->label(__('Tipo'))
                     ->searchable()
                     ->sortable(),
 
                 TextColumn::make('created_at')
-                    ->label('Criado em')
+                    ->label(__('Criado em'))
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
 
                 TextColumn::make('updated_at')
-                    ->label('Alterado em')
+                    ->label(__('Alterado em'))
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
@@ -120,21 +119,21 @@ class NecessityResource extends Resource
     {
         return $infolist
             ->schema([
-                Tabs::make('Necessity Details')
+                Tabs::make(__('Detalhes da Necessidade'))
                     ->columnSpan('full')
                     ->tabs([
-                        Tab::make('Detalhes')
+                        Tab::make(__('Detalhes'))
                             ->icon('heroicon-o-hand-raised')
                             ->schema([
                                 TextEntry::make('name')
-                                    ->label('Nome'),
+                                    ->label(__('Nome')),
                                 TextEntry::make('type.name')
-                                    ->label('Tipo'),
+                                    ->label(__('Tipo')),
                                 TextEntry::make('created_at')
-                                    ->label('Criado em')
+                                    ->label(__('Criado em'))
                                     ->dateTime('d/m/Y H:i:s'),
                                 TextEntry::make('updated_at')
-                                    ->label('Alterado em')
+                                    ->label(__('Alterado em'))
                                     ->dateTime('d/m/Y H:i:s'),
                             ])
                             ->columns([
@@ -182,5 +181,20 @@ class NecessityResource extends Resource
         }
 
         return $details;
+    }
+
+    public static function getNavigationGroup(): ?string
+    {
+        return __('Necessidades');
+    }
+
+    protected static function navigationSingular(): string
+    {
+        return __('Necessidades');
+    }
+
+    protected static function navigationPlural(): string
+    {
+        return __('Necessidade');
     }
 }
