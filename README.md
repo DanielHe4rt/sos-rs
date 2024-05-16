@@ -1,5 +1,21 @@
 ## SOS-RS
 
+<!-- TOC -->
+  * [SOS-RS](#sos-rs)
+    * [Project Goal](#project-goal)
+    * [Prerequisites](#prerequisites)
+      * [Contribution Guide](#contribution-guide)
+    * [Features](#features)
+    * [Tables](#tables)
+      * [necessity_type](#necessity_type)
+      * [necessity](#necessity)
+      * [shelters](#shelters)
+      * [shelter_needs](#shelter_needs)
+      * [shelter_needs](#shelter_needs-1)
+      * [victims](#victims)
+      * [victim_emergency_contact](#victim_emergency_contact)
+      * [victim_pets](#victim_pets)
+<!-- TOC -->
 
 <!-- ![Fluxograma](/.github/images/base-app.jpg) -->
 
