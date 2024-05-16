@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Enums\VictimStatusEnum;
 use App\Filament\Resources\VictimResource\Pages;
 use App\Models\Victim\Victim;
+use App\Traits\HasTranslatedNavigation;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -27,44 +28,52 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class VictimResource extends Resource
 {
+    use HasTranslatedNavigation;
+
     protected static ?string $model = Victim::class;
 
     protected static ?string $slug = 'victims';
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-user-group';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Placeholder::make('created_at')
-                    ->label('Created Date')
-                    ->content(fn(?Victim $record): string => $record?->created_at?->diffForHumans() ?? '-'),
-
-                Placeholder::make('updated_at')
-                    ->label('Last Modified Date')
-                    ->content(fn(?Victim $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
-
                 Select::make('type_id')
+                    ->label(__('Tipo'))
                     ->options(VictimStatusEnum::class)
                     ->required(),
 
                 Select::make('shelter_id')
+                    ->label(__('Abrigo'))
                     ->relationship('shelter', 'name')
                     ->searchable()
                     ->required(),
 
                 TextInput::make('location')
+                    ->label(__('Localização'))
                     ->required(),
 
                 TextInput::make('name')
+                    ->label(__('Nome'))
                     ->required(),
 
                 TextInput::make('phone_number')
+                    ->label(__('Número de telefone'))
                     ->required(),
 
                 TextInput::make('notes')
+                    ->label(__('Notas'))
                     ->required(),
+
+                Placeholder::make('created_at')
+                    ->label(__('Criado em'))
+                    ->content(fn (?Victim $record): string => $record?->created_at?->diffForHumans() ?? '-'),
+
+                Placeholder::make('updated_at')
+                    ->label(__('Alterado em'))
+                    ->content(fn (?Victim $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
             ]);
     }
 
@@ -73,23 +82,30 @@ class VictimResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('status_id')
+                    ->label(__('Estado'))
                     ->badge(),
 
                 TextColumn::make('shelter.name')
+                    ->label(__('Abrigo'))
                     ->searchable()
                     ->sortable(),
 
-                TextColumn::make('location'),
+                TextColumn::make('location')
+                    ->label(__('Localização')),
 
                 TextColumn::make('name')
+                    ->label(__('Nome'))
                     ->searchable()
                     ->sortable(),
 
-                TextColumn::make('phone_number'),
+                TextColumn::make('phone_number')
+                    ->label(__('Número de telefone')),
 
-                TextColumn::make('address'),
+                TextColumn::make('address')
+                    ->label(__('Endereço')),
 
-                TextColumn::make('notes'),
+                TextColumn::make('notes')
+                    ->label(__('Notas')),
             ])
             ->filters([
                 TrashedFilter::make(),
@@ -145,5 +161,15 @@ class VictimResource extends Resource
         }
 
         return $details;
+    }
+
+    protected static function navigationSingular(): string
+    {
+        return __('Vítima');
+    }
+
+    protected static function navigationPlural(): string
+    {
+        return __('Vítimas');
     }
 }

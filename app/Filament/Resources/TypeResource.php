@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\TypeResource\Pages;
 use App\Models\Necessity\Type;
+use App\Traits\HasTranslatedNavigation;
 use Filament\Forms\Components\ColorPicker;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
@@ -27,13 +28,13 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class TypeResource extends Resource
 {
+    use HasTranslatedNavigation;
+
     protected static ?string $model = Type::class;
 
-    protected static ?string $navigationGroup = 'Necessidades';
-    protected static ?string $modelLabel = 'Tipo de Necessidade';
-    protected static ?string $pluralLabel = 'Tipos de Necessidades';
-
     protected static ?string $slug = 'types';
+
+    protected static ?int $navigationSort = 1;
 
     protected static ?string $navigationIcon = 'heroicon-o-exclamation-circle';
 
@@ -41,43 +42,44 @@ class TypeResource extends Resource
     {
         return $form
             ->schema([
-                Section::make('Tipos de Necessidades')
-                    ->description('Informe os tipos de necessidades que podem ser cadastradas.')
+                Section::make(__('Tipos de Necessidades'))
+                    ->description(__('Informe os tipos de necessidades que podem ser cadastradas.'))
                     ->collapsible()
                     ->columns(1)
                     ->schema([
                         TextInput::make('name')
-                            ->label('Nome')
+                            ->label(__('Nome'))
                             ->required(),
 
                         ColorPicker::make('color')
+                            ->label(__('Cor'))
                             ->required(),
-                    ])
+                    ]),
             ]);
     }
 
     public static function table(Table $table): Table
     {
         return $table
-            ->heading('Lista de Tipos de Necessidades')
-            ->description('Explore a lista de tipos de necessidades cadastradas.')
+            ->heading(__('Lista de Tipos de Necessidades'))
+            ->description(__('Explore a lista de tipos de necessidades cadastradas.'))
             ->columns([
                 TextColumn::make('name')
-                    ->label('Nome')
+                    ->label(__('Nome'))
                     ->searchable()
                     ->sortable(),
 
                 ColorColumn::make('color')
-                    ->label('Cor'),
+                    ->label(__('Cor')),
 
                 TextColumn::make('created_at')
-                    ->label('Criado em')
+                    ->label(__('Criado em'))
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
 
                 TextColumn::make('updated_at')
-                    ->label('Alterado em')
+                    ->label(__('Alterado em'))
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
@@ -91,7 +93,7 @@ class TypeResource extends Resource
                     DeleteAction::make(),
                     RestoreAction::make(),
                     ForceDeleteAction::make(),
-                ])
+                ]),
             ])
             ->bulkActions([
                 BulkActionGroup::make([
@@ -122,5 +124,20 @@ class TypeResource extends Resource
     public static function getGloballySearchableAttributes(): array
     {
         return ['name'];
+    }
+
+    public static function getNavigationGroup(): ?string
+    {
+        return __('Necessidades');
+    }
+
+    protected static function navigationSingular(): string
+    {
+        return __('Tipo de Necessidade');
+    }
+
+    protected static function navigationPlural(): string
+    {
+        return __('Tipos de Necessidades');
     }
 }

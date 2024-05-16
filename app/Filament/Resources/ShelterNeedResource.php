@@ -5,16 +5,16 @@ namespace App\Filament\Resources;
 use App\Enums\ShelterNeedTypeEnum;
 use App\Filament\Resources\ShelterNeedResource\Pages;
 use App\Models\Shelter\ShelterNeed;
-use Filament\Infolists\Components\IconEntry;
+use App\Traits\HasTranslatedNavigation;
+use Filament\Forms;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Form;
 use Filament\Infolists\Components\Tabs;
 use Filament\Infolists\Components\Tabs\Tab;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
-use Filament\Tables\Actions\ActionGroup;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
+use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Actions\BulkActionGroup;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\DeleteBulkAction;
@@ -31,16 +31,16 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Filament\Forms;
 
 class ShelterNeedResource extends Resource
 {
+    use HasTranslatedNavigation;
+
     protected static ?string $model = ShelterNeed::class;
-    protected static ?string $navigationGroup = 'Abrigo';
-    protected static ?string $modelLabel = 'Necessidade de Abrigo';
-    protected static ?string $pluralLabel = 'Necessidades de Abrigos';
 
     protected static ?string $slug = 'shelter-needs';
+
+    protected static ?int $navigationSort = 1;
 
     protected static ?string $navigationIcon = 'heroicon-o-list-bullet';
 
@@ -48,69 +48,69 @@ class ShelterNeedResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Section::make('Informações gerais')
-                    ->description('Insira as informações necessárias para a necessidade de abrigo.')
+                Forms\Components\Section::make(__('Informações gerais'))
+                    ->description(__('Insira as informações necessárias para a necessidade de abrigo.'))
                     ->collapsible()
                     ->columns(1)
                     ->schema([
                         Select::make('shelter_id')
-                            ->label('Abrigo')
+                            ->label(__('Abrigo'))
                             ->relationship('shelter', 'name')
                             ->preload()
                             ->searchable()
                             ->required(),
 
                         Select::make('necessity_id')
-                            ->label('Necessidade')
+                            ->label(__('Necessidade'))
                             ->relationship('necessity', 'name')
                             ->preload()
                             ->searchable()
                             ->required(),
 
                         Select::make('type_id')
-                            ->label('Tipo')
+                            ->label(__('Tipo'))
                             ->options(ShelterNeedTypeEnum::class)
                             ->required(),
-                    ])
+                    ]),
             ]);
     }
 
     public static function table(Table $table): Table
     {
         return $table
-            ->heading('Lista de Necessidades de Abrigos')
-            ->description('Explore a lista de necessidades de abrigos para opções de gerenciamento abrangentes.')
+            ->heading(__('Lista de Necessidades de Abrigos'))
+            ->description(__('Explore a lista de necessidades de abrigos para opções de gerenciamento abrangentes.'))
             ->columns([
                 TextColumn::make('shelter.name')
-                    ->label('Abrigo')
+                    ->label(__('Abrigo'))
                     ->searchable()
                     ->sortable(),
 
                 TextColumn::make('necessity.name')
-                    ->label('Necessidade')
+                    ->label(__('Necessidade'))
                     ->searchable()
                     ->sortable(),
 
                 TextColumn::make('type_id')
-                    ->label('Tipo')
+                    ->label(__('Tipo'))
                     ->sortable()
                     ->badge(),
 
                 TextColumn::make('created_at')
-                    ->label('Criado em')
+                    ->label(__('Criado em'))
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
 
                 TextColumn::make('updated_at')
-                    ->label('Alterado em')
+                    ->label(__('Alterado em'))
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 SelectFilter::make('type_id')
-                    ->label('Tipo')
+                    ->label(__('Tipo'))
                     ->options(ShelterNeedTypeEnum::class)
                     ->multiple()
                     ->native(false)
@@ -124,7 +124,7 @@ class ShelterNeedResource extends Resource
                     DeleteAction::make(),
                     RestoreAction::make(),
                     ForceDeleteAction::make(),
-                ])
+                ]),
             ])
             ->bulkActions([
                 BulkActionGroup::make([
@@ -139,25 +139,25 @@ class ShelterNeedResource extends Resource
     {
         return $infolist
             ->schema([
-                Tabs::make('Shelter Details')
+                Tabs::make(__('Detalhes do Abrigo'))
                     ->columnSpan('full')
                     ->tabs([
-                        Tab::make('Detalhes')
+                        Tab::make(__('Detalhes'))
                             ->icon('heroicon-o-list-bullet')
                             ->schema([
                                 TextEntry::make('shelter.name')
-                                    ->label('Nome do Abrigo'),
+                                    ->label(__('Nome do Abrigo')),
                                 TextEntry::make('necessity.name')
-                                    ->label('Necessidade'),
+                                    ->label(__('Necessidade')),
                                 TextEntry::make('type_id')
                                     ->badge()
-                                    ->label('Tipo'),
+                                    ->label(__('Tipo')),
                                 TextEntry::make(''),
                                 TextEntry::make('created_at')
-                                    ->label('Criado em')
+                                    ->label(__('Criado em'))
                                     ->dateTime('d/m/Y H:i:s'),
                                 TextEntry::make('updated_at')
-                                    ->label('Alterado em')
+                                    ->label(__('Alterado em'))
                                     ->dateTime('d/m/Y H:i:s'),
                             ])
                             ->columns([
@@ -209,5 +209,20 @@ class ShelterNeedResource extends Resource
         }
 
         return $details;
+    }
+
+    public static function getNavigationGroup(): ?string
+    {
+        return __('Abrigos');
+    }
+
+    protected static function navigationSingular(): string
+    {
+        return __('Necessidade de Abrigo');
+    }
+
+    protected static function navigationPlural(): string
+    {
+        return __('Necessidades de Abrigos');
     }
 }
